@@ -1,11 +1,14 @@
 # Instalamos el paquete en caso de no tenerlo instalado
-# install.packages("dplyr")
+install.packages("dplyr")
+install.packages("readxl")
+
 
 # Cargamos la librería
 library(dplyr)
+library(readxl)
 
 # Fijamos la ruta del archivo de datos
-setwd("/home/julian/Facultad/PyE/TP - Primera Parte/")
+setwd("D:\\Facu\\LCC\\tpPYE")
 
 # Cargo el archivo de datos .xlsx
 data_set <- readxl::read_excel("Datos_LP.xlsx", 
@@ -13,7 +16,7 @@ data_set <- readxl::read_excel("Datos_LP.xlsx",
 														   skip = 3)
 
 # Veo la estructura del dataset
-str(data_set)
+head(data_set)
 
 # Fijo el dataset
 attach(data_set)
@@ -22,7 +25,7 @@ attach(data_set)
 colnames(data_set) <- 1:118
 
 # Filtramos las columnas que queremos:
-filtered_date_set <- data_set %>%
+filtered_data_set <- data_set %>%
 	select(   # Seleccionar las columnas que quiero conservar
 		"5",                            # Tiempo de residencia
 		"14",                           # Máximo de personas
@@ -40,3 +43,35 @@ filtered_date_set <- data_set %>%
 		"93","94","95"                  # Columnas Plagas
 	)
 
+
+colnames(filtered_data_set) <- c(
+  "tiempo_residencia",
+  "max_personas",
+  "lugar_habitado",
+  "forma_obtencion_agua",
+  "tipo_desague",
+  "energia_garrafa",
+  "energia_electrica",
+  "energia_lena",
+  "energia_carbon",
+  "energia_gas_red",
+  "energia_otro",
+  "tipo_conexion_electrica",
+  "conexion_internet",
+  "material_piso",
+  "material_techo",
+  "material_paredes",
+  "humedad_goteras",
+  "humedad_paredes_pintura",
+  "humedad_piso",
+  "humedad_techos",
+  "humedad_filtraciones",
+  "humedad_otro",
+  "problemas_plagas",
+  "plagas_cucarachas",
+  "plagas_roedores",
+  "plagas_otros"
+)
+
+head(filtered_data_set)
+  

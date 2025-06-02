@@ -1,61 +1,32 @@
 library(ggplot2)
 
 # HISTOGRAMA HUMBRAL DE HACINAMIENTO
-# Establecemos los intervalos
-breakpoints <- 0:10
+uh_histogram <- ggplot(filtered_data_set) +
+                aes(x=umbralHacinamiento) +
+                geom_histogram(fill = "lightgray", 
+                               col = "black",
+                               breaks= seq(0,10,1))+
+                scale_x_continuous(breaks = seq(0,10,1)) +
+                coord_cartesian(ylim = c(0, 600)) +
+                labs(x="Umbral de Hacinamiento", 
+                     y="Frecuencia Absoluta",
+                     main="Distribución del Umbral de Hacinamiento en Villas de Argentina en 2022",
+                     caption="Fuente: Fundación Rosa Luxemurgo")
 
-# Pasamos el dataset values, dividimos los datos en los intervalos dados por breakpoints, eliminamos los 
-# ejes X e Y con xaxt e yaxt, y asignamos freq=TRUE para que las alturas de las barras estén bien
-uh_histogram <- hist(x = filtered_data_set$umbralHacinamiento,
-                           breaks = breakpoints,
-                           ylim = c(0,500),
-                           xlab = "Umbral de Hacinamiento",
-                           ylab = "Frecuencia Absoluta",
-                           main = "Distribución del Umbral de Hacinamiento en Villas de Argentina en 2022",
-                           col = "lightpink",
-                           right = FALSE,
-                           include.lowest = TRUE,
-                           xaxt = "n",
-                           yaxt = "n",
-                           freq=TRUE
-                           )
-
-# Creamos el eje X manualmente
-axis(side = 1,
-     font = 2,
-     at = seq(0, 10, by = 1),
-     labels = seq(0, 10, by = 1),
-     cex.axis = 0.8)
-
-# Creamos el eje Y manualmente
-axis(side = 2,
-     font = 2,
-     at = seq(0, 500, by = 100),
-     labels = seq(0, 500, by = 100),
-     cex.axis = 0.8)
-
-# Agregamos la fuente
-mtext("Fuente: Fundación Rosa Luxemurgo",
-      side=1,
-      font = 2,
-      line=3,
-      at = -1.2,
-      adj=0,
-      cex=0.9)
 
 # GRÁFICO DE BARRAS PARA PISO
 floor_names = c("Tierra",
-              "Madera",
-              "Cerámico",
-              "Cemento")
+                "Cemento",
+                "Madera",
+                "Cerámico")
 
 floor_mat <- filtered_data_set$material_piso
 length_fm <- length(floor_mat)
 
 heights_fm <- c(length(floor_mat[floor_mat == "Sin piso/tierra"])/length_fm,
+                length(floor_mat[floor_mat == "Carpeta de cemento"])/length_fm,
                 length(floor_mat[floor_mat == "Madera"])/length_fm,
-                length(floor_mat[floor_mat == "Cerámico"])/length_fm,
-                length(floor_mat[floor_mat == "Carpeta de cemento"])/length_fm)*100
+                length(floor_mat[floor_mat == "Cerámico"])/length_fm)*100
 
 # Ajustamos los márgenes para que entren todas las cosas
 par(mar = c(6, 8, 4,2))
@@ -89,20 +60,20 @@ mtext("Fuente: Fundación Rosa Luxemurgo",
 
 
 # GRÁFICO DE BARRAS PARA PAREDES
-wall_names = c("Madera",
+wall_names = c("Chapa",
+               "Madera",
+               "Adobe",
                "Planchón",
-               "Ladrillo",
-               "Chapa",
-               "Adobe")
+               "Mampostería")
 
 wall_mat <- filtered_data_set$material_paredes
 length_wm <- length(wall_mat)
 
-heights_wm <- c(length(wall_mat[wall_mat == "Trama en madera/tapial de madera"])/length_wm,
+heights_wm <- c(length(wall_mat[wall_mat == "Chapa"])/length_wm,
+                length(wall_mat[wall_mat == "Trama en madera/tapial de madera"])/length_wm,
+                length(wall_mat[wall_mat == "Adobe"])/length_wm,
                 length(wall_mat[wall_mat == "Planchón (describir qué es)"])/length_wm,
-                length(wall_mat[wall_mat == "Mampostería (ladrillo/block"])/length_wm,
-                length(wall_mat[wall_mat == "Chapa"])/length_wm,
-                length(wall_mat[wall_mat == "Adobe"])/length_wm)*100
+                length(wall_mat[wall_mat == "Mampostería (ladrillo/block"])/length_wm)*100
 
 # Ajustamos los márgenes para que entren todas las cosas
 par(mar = c(6, 8, 4,2))
@@ -136,18 +107,18 @@ mtext("Fuente: Fundación Rosa Luxemurgo",
 
 
 # GRÁFICO DE BARRAS PARA TECHOS
-ceil_names = c("Caña/Adobe",
-               "Losa de Viguetas",
-               "Lona",
-               "Chapa")
+ceil_names = c("Lona",
+               "Caña/Adobe",
+               "Chapa",
+               "Losa de Viguetas")
 
 ceil_mat <- filtered_data_set$material_techo
 length_cm <- length(ceil_mat)
 
-heights_cm <- c(length(ceil_mat[ceil_mat == "Caña/adobe"])/length_cm,
-                length(ceil_mat[ceil_mat == "Losa de viguetas"])/length_cm,
-                length(ceil_mat[ceil_mat == "Lona"])/length_cm,
-                length(ceil_mat[ceil_mat == "Chapa"])/length_cm)*100
+heights_cm <- c(length(ceil_mat[ceil_mat == "Lona"])/length_cm,
+                length(ceil_mat[ceil_mat == "Caña/adobe"])/length_cm,
+                length(ceil_mat[ceil_mat == "Chapa"])/length_cm,
+                length(ceil_mat[ceil_mat == "Losa de viguetas"])/length_cm)*100
 
 # Ajustamos los márgenes para que entren todas las cosas
 par(mar = c(6, 8, 4,2))
@@ -304,4 +275,23 @@ quantiles_IFM <- round(quantile(filtered_data_set$IFM, na.rm = TRUE),2)
 
 quantiles_IEH <- round(quantile(filtered_data_set$IEH, na.rm = TRUE),2)
 
-corr_UH_IFM <- cor(filtered_data_set$umbralHacinamiento,filtered_data_set$IFM)
+aux_df1 <- filtered_data_set %>%
+  select(umbralHacinamiento,IFM)
+
+aux_df1 <- na.omit(aux_df1)
+
+corr_UH_IFM <- round(cor(aux_df1$umbralHacinamiento,aux_df1$IFM),2)
+
+aux_df2 <- filtered_data_set %>%
+  select(problemas_plagas,umbralHacinamiento)
+
+aux_df2 <- na.omit(aux_df2)
+
+uh_con_plagas <- aux_df2[aux_df2$problemas_plagas == "Sí",]
+uh_sin_plagas <- aux_df2[aux_df2$problemas_plagas == "No",]
+
+quantiles_uh_con_plagas <- round(quantile(uh_con_plagas$umbralHacinamiento),2)
+quantiles_uh_sin_plagas <- round(quantile(uh_sin_plagas$umbralHacinamiento),2)
+
+
+

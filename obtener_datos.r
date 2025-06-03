@@ -40,7 +40,6 @@ filtered_data_set <- data_set %>%
 		"93","94","95"                  # Columnas Plagas
 	)
 
-
 colnames(filtered_data_set) <- c(
   "tiempo_residencia",
   "cant_integrantes_del_hogar",

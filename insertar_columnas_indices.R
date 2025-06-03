@@ -34,8 +34,8 @@ filtered_data_set <- filtered_data_set %>%
   
   # IEH: puntaje de tenencia y normalizaciones
   score_tenencia = case_when(
-    vinculo_vivienda == "Alquilado"                                ~ 4,
     vinculo_vivienda == "Propio con algún comprobante de tenencia" ~ 4,
+    vinculo_vivienda == "Alquilado"                                ~ 3,
     vinculo_vivienda == "Propio sin títulos"                       ~ 3,
     vinculo_vivienda == "Prestado"                                 ~ 2,
     vinculo_vivienda == "Ocupado/Tomado"                           ~ 1

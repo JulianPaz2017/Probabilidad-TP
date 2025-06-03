@@ -144,9 +144,7 @@ aux2 <- round(length(aux[aux == "No"])/length(aux),2)*100
 
 x <- c(100-aux2,aux2)
 labels <- c("Sufre de Plagas","No Sufre de Plagas")
-main <- "Proporción de Hogares con Plagas\n en Barrios Populares de Argentina en 2022"
 
-# c)
 labels_with_percent = paste(paste(labels,"%",sep="\n"),x,sep="")
 
 plagas_pie <- pie(x,
@@ -155,7 +153,7 @@ plagas_pie <- pie(x,
                     clockwise=TRUE,
                     init.angle=0,
                     col = c("lightblue","lightyellow"),
-                    main=main)
+                    main="Proporción de Hogares con Plagas\n en Barrios Populares de Argentina en 2022")
 
 # Agregamos la fuente
 mtext("Fuente: Fundación Rosa Luxemurgo",
@@ -237,7 +235,7 @@ filtered_data_set %>%
 
   tabyl(hacinamiento_critico,problemas_plagas) %>%
   adorn_totals(where = c("row","col")) %>%
-  adorn_percentages(denominator = "row") %>%
+  adorn_percentages(denominator = "all") %>%
   adorn_pct_formatting(digits = 1) %>%
   adorn_title(placement = "top", 
               row_name  = "¿Sufre de hacinamiento crítico?", 
@@ -264,8 +262,8 @@ aux_db <- na.omit(aux_db)
 IEH_con_plagas <- aux_db[aux_db$problemas_plagas == "Sí",]
 IEH_sin_plagas <- aux_db[aux_db$problemas_plagas == "No",]
 
-quantiles_uh_con_plagas <- round(quantile(IEH_con_plagas$IEH),2)
-quantiles_uh_sin_plagas <- round(quantile(IEH_sin_plagas$IEH),2)
+quantiles_IEH_con_plagas <- round(quantile(IEH_con_plagas$IEH),2)
+quantiles_IEH_sin_plagas <- round(quantile(IEH_sin_plagas$IEH),2)
 
 
 
